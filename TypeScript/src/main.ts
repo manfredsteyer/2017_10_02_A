@@ -59,13 +59,9 @@ let showResult = function (flights) {
   $('#result').html(html);
   $('#result').show('slow');
 };
-$('#btnSearch').click(() => {
 
-  let from: string = $('#from').val() as string;
-  let to: string = $('#to').val() as string;
 
-  // let flights = fm.findByRoute(from, to);
-
+function search(from: string, to: string) {
   fm
     .loadFlights(from, to)
     .then((flights) => {
@@ -74,14 +70,18 @@ $('#btnSearch').click(() => {
     })
     .then((returnFlights) => {
         console.debug('returnFlights', returnFlights);
-      }
-    )
+    })
     .catch(err => {
       console.error('Error loading flights', err);
     });
+}
 
+$('#btnSearch').click(() => {
 
+  let from: string = $('#from').val() as string;
+  let to: string = $('#to').val() as string;
 
+  search();
 });
 
 
