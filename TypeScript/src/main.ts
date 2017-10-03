@@ -41,15 +41,9 @@ console.debug('flights count', fm.count);
 
 // GUI
 
-$('#btnSearch').click(() => {
-
-  let from: string = $('#from').val() as string;
-  let to: string = $('#to').val() as string;
-
-  let flights = fm.findByRoute(from, to);
-
+let showResult = function (flights) {
   let html = '<table>';
-  for(let f of flights) {
+  for (let f of flights) {
     html += `
       <tr>
         <td>${f.id}</td>
@@ -61,7 +55,33 @@ $('#btnSearch').click(() => {
   }
   html += "</table>";
 
+  $('#result').hide();
   $('#result').html(html);
+  $('#result').show('slow');
+};
+$('#btnSearch').click(() => {
+
+  let from: string = $('#from').val() as string;
+  let to: string = $('#to').val() as string;
+
+  // let flights = fm.findByRoute(from, to);
+
+  fm
+    .loadFlights(from, to)
+    .then((flights) => {
+      showResult(flights);
+      return fm.loadFlights(to, from);
+    })
+    .then((returnFlights) => {
+        console.debug('returnFlights', returnFlights);
+      }
+    )
+    .catch(err => {
+      console.error('Error loading flights', err);
+    });
+
+
+
 });
 
 

@@ -7,6 +7,20 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    body {
+      font-family: Arial;
+    }
+    label {
+      font-weight: bold;
+      min-width:70px;
+      display: inline-block;
+    }
+
+    table td {
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
   <!-- Angular-Element nicht angreifen -->
@@ -14,8 +28,8 @@
   <!-- / Angular-Element nicht angreifen -->
 
 
-  From: <input id="from"><br>
-  To: <input id="to"><br><br>
+  <label for="from">From:</label> <input id="from"><br>
+  <label for="from">To:</label> <input id="to"><br><br>
   <button id="btnSearch">Search</button>
   <br><br>
   <div id="result"></div>
