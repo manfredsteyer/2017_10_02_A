@@ -37,9 +37,12 @@ fm.add(f2);
 fm.add(f3);
 
 let result = fm.findById(18);
-console.debug('found flight', result);
-console.debug('found flightId', result.id);
 
+console.debug('found flight', result);
+
+if (result) {
+  console.debug('found flightId', result.id);
+}
 console.debug('flights count', fm.count);
 
 
@@ -79,18 +82,18 @@ async function search(from: string, to: string) {
 */
 
  function search(from: string, to: string) {
-   fm
-     .loadFlightsWithObservables(from, to)
-     .subscribe(
-       (flights) => {
-         showResult(flights);
-       },
-       (err) => {
-         console.debug('Error')
-       },
-       () => {
-         console.debug('Received all data!')
-       });
+
+     fm.loadFlightsWithObservables(from, to)
+       .subscribe(
+         (flights) => {
+           showResult(flights);
+         },
+         (err) => {
+           console.debug('Error')
+         },
+         () => {
+           console.debug('Received all data!')
+         });
  }
 $('#btnSearch').click(() => {
 

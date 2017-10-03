@@ -9,7 +9,7 @@ export class FlightManager {
     this.flightCache.push(flight);
   }
 
-  findById(id: number): Flight {
+  findById(id: number): Flight | undefined {
     return this.flightCache.find(f => f.id === id);
   }
 
