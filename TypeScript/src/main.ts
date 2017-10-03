@@ -7,8 +7,12 @@ import { Flight } from './flights/flight';
 import { FlightManager } from './flights/flight-manager';
 import { ExtFlightManager } from './flights/ext-flight-manager';
 
+// Nicht vergessen - Operatoren für Observable importieren
+import './rxjs-imports';
+
 // Nicht vergessen!
 import * as $ from 'jquery';
+import { Observable } from 'rxjs/Observable';
 
 
 let f1 = new Flight(17);
@@ -96,7 +100,18 @@ $('#btnSearch').click(() => {
   search(from, to);
 });
 
+let txtLookAhead = $('#txtLookAhead')[0];
 
+Observable
+  .fromEvent(txtLookAhead, 'input')
+  .map( (e:any) => e.target.value)
+  .filter(city => city.length >= 3)
+  .debounceTime(300)
+  .switchMap(city => fm.loadFlightsWithObservables(city, ''))
+  .subscribe(
+    flights => showResult(flights),
+    err => { console.error('Fehler beim Laden', err); }
+  );
 
 //
 // The rest of this file is needed to bootstrap the Angular Application
