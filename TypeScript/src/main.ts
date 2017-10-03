@@ -60,28 +60,40 @@ let showResult = function (flights) {
   $('#result').show('slow');
 };
 
-
-function search(from: string, to: string) {
-  fm
-    .loadFlights(from, to)
-    .then((flights) => {
+/*
+async function search(from: string, to: string) {
+    try {
+      let flights = await fm.loadFlights(from, to);
       showResult(flights);
-      return fm.loadFlights(to, from);
-    })
-    .then((returnFlights) => {
-        console.debug('returnFlights', returnFlights);
-    })
-    .catch(err => {
+      let returnFlights = await fm.loadFlights(to, from);
+      console.debug('returnFlights', returnFlights);
+    }
+    catch(err) {
       console.error('Error loading flights', err);
-    });
+    }
 }
+*/
 
+ function search(from: string, to: string) {
+   fm
+     .loadFlightsWithObservables(from, to)
+     .subscribe(
+       (flights) => {
+         showResult(flights);
+       },
+       (err) => {
+         console.debug('Error')
+       },
+       () => {
+         console.debug('Received all data!')
+       });
+ }
 $('#btnSearch').click(() => {
 
   let from: string = $('#from').val() as string;
   let to: string = $('#to').val() as string;
 
-  search();
+  search(from, to);
 });
 
 

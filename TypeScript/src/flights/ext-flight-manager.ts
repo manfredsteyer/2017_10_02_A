@@ -1,6 +1,8 @@
 
 import { FlightManager } from './flight-manager';
 import { Flight } from './flight';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 
 
 export class ExtFlightManager extends FlightManager {
@@ -56,5 +58,27 @@ export class ExtFlightManager extends FlightManager {
 
   }
 
+  loadFlightsWithObservables(from: string, to: string): Observable<Flight[]> {
+    return Observable.create((sender: Observer<Flight[]>) => {
+      let xmlhttp;
+      xmlhttp = new XMLHttpRequest();
+
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          let flights = JSON.parse(this.responseText);
+          sender.next(flights);
+          sender.complete();
+        }
+        else if (this.status != 200 && this.readyState == 4) {
+          sender.error(this.status + ", " + this.statusText + ", " + this.responseText);
+          sender.complete();
+        }
+      };
+
+      xmlhttp.open("GET", `http://www.angular.at/api/flight?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`, true);
+      xmlhttp.send();
+    });
+
+  }
 
 }
